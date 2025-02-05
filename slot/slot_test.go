@@ -67,5 +67,13 @@ func TestThrowError_WhenUnParkingInEmptySlot(t *testing.T) {
 }
 
 func TestSlotHasVehicleWithRedColor(t *testing.T) {
-	
+	slot := NewSlot()
+	vechicleWithRedColor := vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-3847", Color: vehicle.Red}
+	slot.Park(vechicleWithRedColor)
+
+	hasRedColorVehicle := slot.HasVehicleColor(vehicle.Red)
+
+	if hasRedColorVehicle == false {
+		t.Error("Expected vehicle color to be red, but not found")
+	}
 }

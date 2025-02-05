@@ -20,3 +20,11 @@ func TestThrowException_WhenSlotSizeIs0(t *testing.T) {
 		t.Error("Expected ErrInvalidSlotSize when slot size is 0, but nothing thrown")
 	}
 }
+
+func TestParkingLotCreation(t *testing.T) {
+	_, err := NewParkingLot(1)
+
+	if err != nil {
+		t.Error("Expected successful ParkingLot creation, but error thrown")
+	}
+}

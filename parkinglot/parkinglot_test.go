@@ -109,6 +109,28 @@ func TestThrowException_WhenUnparkingInEmptySlot(t *testing.T) {
 	}
 }
 
+func TestParkingVehicle_WhenAnotherVehicleUnparks(t *testing.T) {
+	parkingLot, _ := NewParkingLot(2)
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Green)
+
+	firstTicket, _ := parkingLot.Park(firstVehicle)
+	parkingLot.Park(secondVehicle)
+
+	parkingLot.UnPark(firstTicket)
+
+	_, err := parkingLot.Park(thirdVehicle)
+	if err != nil {
+		t.Errorf("Expected to park the third vehicle after unparking the first vehicle, but got error: %v", err)
+	}
+
+	isThirdVehicleParked := parkingLot.IsVehicleParked(thirdVehicle.RegistrationNumber)
+	if !isThirdVehicleParked {
+		t.Error("Expected the third vehicle to be parked, but it is not parked")
+	}
+}
+
 func TestCountVehiclesWithRedColor(t *testing.T) {
 	parkingLot, _ := NewParkingLot(5)
 

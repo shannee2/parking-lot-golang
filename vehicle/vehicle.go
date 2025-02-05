@@ -9,6 +9,6 @@ func (v Vehicle) HasRegistrationNumber(registrationNumber string) bool {
 	return v.RegistrationNumber == registrationNumber
 }
 
-func (v *Vehicle) HasColor(color VehicleColor) bool {
+func (v Vehicle) HasColor(color VehicleColor) bool {
 	return v.Color == color
 }

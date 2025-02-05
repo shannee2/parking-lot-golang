@@ -4,9 +4,10 @@ import (
 	"testing"
 )
 
-func TestVehicle(t *testing.T) {
-	v := Vehicle{"KA-01-HH-1234", Red}
-	if !v.HasRegistrationNumber("KA-01-HH-1234") {
+func TestVehicleCreation(t *testing.T) {
+	registrationNumber := "KA-01-HH-1234"
+	v := Vehicle{registrationNumber, Red}
+	if !v.HasRegistrationNumber(registrationNumber) {
 		t.Errorf("Expected registration number to be KA-01-HH-1234, but got %s", v.RegistrationNumber)
 	}
 	if !v.HasColor(Red) {

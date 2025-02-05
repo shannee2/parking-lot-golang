@@ -29,7 +29,7 @@ func (s *Slot) UnPark() error {
 	return nil
 }
 
-func (s *Slot) HasVehicleColor(color vehicle.VehicleColor) interface{} {
+func (s *Slot) HasVehicleColor(color vehicle.VehicleColor) bool {
 	return s.vehicle != nil && s.vehicle.HasColor(color)
 }
 

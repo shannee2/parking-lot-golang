@@ -2,6 +2,7 @@ package parkinglot
 
 import (
 	"parkinglot/errors"
+	"parkinglot/ticket"
 	"parkinglot/vehicle"
 	"testing"
 )
@@ -80,5 +81,62 @@ func TestThrowExceptionWhenAllSlotsOccupied(t *testing.T) {
 
 	if err != errors.ErrAllSlotsOccupied {
 		t.Error("Expected to throw error when all slots occupied, but nothing thrown", err)
+	}
+}
+
+func TestUnparkVehicle(t *testing.T) {
+	parkingLot, _ := NewParkingLot(2)
+	registrationNumber := "UJ-12-HG-3847"
+	vehicle := vehicle.NewVehicle(registrationNumber, vehicle.Red)
+
+	ticket, _ := parkingLot.Park(vehicle)
+	parkingLot.UnPark(ticket)
+	isVehicleParked := parkingLot.IsVehicleParked(registrationNumber)
+
+	if isVehicleParked {
+		t.Error("Expected vehicle to be unparked, but vehicle still parked")
+	}
+}
+
+func TestThrowException_WhenUnparkingInEmptySlot(t *testing.T) {
+	parkingLot, _ := NewParkingLot(2)
+	invalidTicket := ticket.NewTicket()
+
+	err := parkingLot.UnPark(invalidTicket)
+
+	if err != errors.ErrTicketNotFound {
+		t.Error("Expected ErrTicketNotFound when unparking with an invalid ticket, but got a different error or no error")
+	}
+}
+
+func TestCountVehiclesWithRedColor(t *testing.T) {
+	parkingLot, _ := NewParkingLot(5)
+
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Red)
+	fourthVehicle := vehicle.NewVehicle("KA-05-MH-1234", vehicle.Green)
+	fifthVehicle := vehicle.NewVehicle("TN-22-XY-5678", vehicle.Red)
+
+	parkingLot.Park(firstVehicle)
+	parkingLot.Park(secondVehicle)
+	parkingLot.Park(thirdVehicle)
+	parkingLot.Park(fourthVehicle)
+	parkingLot.Park(fifthVehicle)
+
+	redCount := parkingLot.countVehiclesWithColor(vehicle.Red)
+	blueCount := parkingLot.countVehiclesWithColor(vehicle.Blue)
+	greenCount := parkingLot.countVehiclesWithColor(vehicle.Green)
+
+	if redCount != 3 {
+		t.Errorf("Expected 3 red vehicles, but got %d", redCount)
+	}
+
+	if blueCount != 1 {
+		t.Errorf("Expected 1 blue vehicle, but got %d", blueCount)
+	}
+
+	if greenCount != 1 {
+		t.Errorf("Expected 1 green vehicle, but got %d", greenCount)
 	}
 }

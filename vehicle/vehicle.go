@@ -12,3 +12,10 @@ func (v Vehicle) HasRegistrationNumber(registrationNumber string) bool {
 func (v Vehicle) HasColor(color VehicleColor) bool {
 	return v.Color == color
 }
+
+func NewVehicle(registrationNumber string, color VehicleColor) *Vehicle {
+	return &Vehicle{
+		RegistrationNumber: registrationNumber,
+		Color:              color,
+	}
+}

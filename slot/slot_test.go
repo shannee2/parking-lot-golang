@@ -17,7 +17,7 @@ func TestSlotCreation(t *testing.T) {
 func TestSlotUnoccupiedInitially(t *testing.T) {
 	slot := NewSlot()
 
-	if slot.isOccupied() {
+	if slot.IsOccupied() {
 		t.Error("Expected slot to be unoccupied when not parked a vehicle, but it is occupied")
 	}
 }
@@ -25,28 +25,49 @@ func TestSlotUnoccupiedInitially(t *testing.T) {
 func TestSlotOccupiedWhenParkedVehicle(t *testing.T) {
 	slot := NewSlot()
 
-	slot.Park(vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-3847", Color: vehicle.Red})
+	slot.Park(vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red))
 
-	if !slot.isOccupied() {
+	if !slot.IsOccupied() {
 		t.Error("Expected slot to be occupied, but it is unoccupied")
+	}
+}
+
+func TestVehicleParked_WithRegistrationNumber(t *testing.T) {
+	slot := NewSlot()
+	registrationNumber := "UJ-12-HG-3847"
+
+	slot.Park(vehicle.NewVehicle(registrationNumber, vehicle.Red))
+
+	if !slot.IsVehicleParked(registrationNumber) {
+		t.Error("Expected registration number to be parked, but it not found")
+	}
+}
+
+func TestVehicleNotParked_WithRegistrationNumber(t *testing.T) {
+	slot := NewSlot()
+
+	slot.Park(vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red))
+
+	if slot.IsVehicleParked("UJ-12-HG-1234") {
+		t.Error("Expected registration number to be not parked, but it is parked")
 	}
 }
 
 func TestUnparkVehicle(t *testing.T) {
 	slot := NewSlot()
 
-	slot.Park(vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-3847", Color: vehicle.Red})
+	slot.Park(vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red))
 	slot.UnPark()
 
-	if slot.isOccupied() {
+	if slot.IsOccupied() {
 		t.Error("Expected slot to be unoccupied when unparked a vehicle, but it is occupied")
 	}
 }
 
 func TestThrowError_WhenParkingInOccupiedSlot(t *testing.T) {
 	slot := NewSlot()
-	firstVehicle := vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-3847", Color: vehicle.Red}
-	secondVehicle := vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-1234", Color: vehicle.Blue}
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("UJ-12-HG-1234", vehicle.Blue)
 
 	_ = slot.Park(firstVehicle)
 	err := slot.Park(secondVehicle)
@@ -68,7 +89,7 @@ func TestThrowError_WhenUnParkingInEmptySlot(t *testing.T) {
 
 func TestSlotHasVehicleWithRedColor(t *testing.T) {
 	slot := NewSlot()
-	vechicleWithRedColor := vehicle.Vehicle{RegistrationNumber: "UJ-12-HG-3847", Color: vehicle.Red}
+	vechicleWithRedColor := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
 	slot.Park(vechicleWithRedColor)
 
 	hasRedColorVehicle := slot.HasVehicleColor(vehicle.Red)

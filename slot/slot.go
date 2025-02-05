@@ -9,15 +9,15 @@ type Slot struct {
 	vehicle *vehicle.Vehicle
 }
 
-func (s *Slot) Park(v vehicle.Vehicle) error {
-	if s.isOccupied() {
+func (s *Slot) Park(v *vehicle.Vehicle) error {
+	if s.IsOccupied() {
 		return errors.ErrSlotAlreadyOccupied
 	}
-	s.vehicle = &v
+	s.vehicle = v
 	return nil
 }
 
-func (s *Slot) isOccupied() bool {
+func (s *Slot) IsOccupied() bool {
 	return s.vehicle != nil
 }
 
@@ -31,6 +31,10 @@ func (s *Slot) UnPark() error {
 
 func (s *Slot) HasVehicleColor(color vehicle.VehicleColor) interface{} {
 	return s.vehicle != nil && s.vehicle.HasColor(color)
+}
+
+func (s *Slot) IsVehicleParked(registrationNumber string) bool {
+	return s.vehicle != nil && s.vehicle.HasRegistrationNumber(registrationNumber)
 }
 
 func NewSlot() *Slot {

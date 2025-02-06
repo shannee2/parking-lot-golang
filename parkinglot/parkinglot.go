@@ -79,3 +79,22 @@ func NewParkingLot(size int) (*ParkingLot, error) {
 	}
 	return parkingLot, nil
 }
+
+func (l *ParkingLot) CountParkedVehicles() int {
+	count := 0
+	for _, s := range l.slots {
+		if s.IsOccupied() {
+			count++
+		}
+	}
+	return count
+}
+
+func (l *ParkingLot) IsFull() bool {
+	for _, s := range l.slots {
+		if !s.IsOccupied() {
+			return false
+		}
+	}
+	return true
+}

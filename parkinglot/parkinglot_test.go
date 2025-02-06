@@ -1,6 +1,7 @@
 package parkinglot
 
 import (
+	"github.com/stretchr/testify/assert"
 	"parkinglot/errors"
 	"parkinglot/ticket"
 	"parkinglot/vehicle"
@@ -161,4 +162,58 @@ func TestCountVehiclesWithRedColor(t *testing.T) {
 	if greenCount != 1 {
 		t.Errorf("Expected 1 green vehicle, but got %d", greenCount)
 	}
+}
+
+func TestCountParkedVehicles_When2ParkedVehicles(t *testing.T) {
+	parkingLot, _ := NewParkingLot(5)
+
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+
+	parkingLot.Park(firstVehicle)
+	parkingLot.Park(secondVehicle)
+
+	count := parkingLot.CountParkedVehicles()
+	assert.Equal(t, 2, count, "Expected 2 parked vehicles, but got %d", count)
+}
+
+func TestCountParkedVehicles_When5ParkedVehicles(t *testing.T) {
+	parkingLot, _ := NewParkingLot(5)
+
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Green)
+	fourthVehicle := vehicle.NewVehicle("KA-05-MH-1234", vehicle.Red)
+	fifthVehicle := vehicle.NewVehicle("TN-22-XY-5678", vehicle.Blue)
+
+	parkingLot.Park(firstVehicle)
+	parkingLot.Park(secondVehicle)
+	parkingLot.Park(thirdVehicle)
+	parkingLot.Park(fourthVehicle)
+	parkingLot.Park(fifthVehicle)
+
+	count := parkingLot.CountParkedVehicles()
+	assert.Equal(t, 5, count, "Expected 5 parked vehicles, but got %d", count)
+}
+
+func TestIsFull_WhenParkingLotIsFull(t *testing.T) {
+	parkingLot, _ := NewParkingLot(2)
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+
+	parkingLot.Park(firstVehicle)
+	parkingLot.Park(secondVehicle)
+
+	isFull := parkingLot.IsFull()
+	assert.True(t, isFull, "Expected parking lot to be full, but it is not")
+}
+
+func TestIsFull_WhenParkingLotIsNotFull(t *testing.T) {
+	parkingLot, _ := NewParkingLot(2)
+	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+
+	parkingLot.Park(firstVehicle)
+
+	isFull := parkingLot.IsFull()
+	assert.False(t, isFull, "Expected parking lot to not be full, but it is")
 }

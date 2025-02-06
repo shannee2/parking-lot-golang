@@ -17,3 +17,5 @@ var ErrTicketNotFound = errors.New("ticket does not found")
 var ErrInvalidParkingLot = errors.New("invalid parking lot")
 
 var ErrAllLotsAreFull = errors.New("all lots are full")
+
+var ErrNoParkingLotAssignedToAttendant = errors.New("no parking lot assigned to attendant")

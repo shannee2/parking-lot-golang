@@ -16,12 +16,27 @@ func (a *Attendant) AssignParkingLot(lot *parkinglot.ParkingLot) {
 }
 
 func (a *Attendant) Park(vehicle *vehicle.Vehicle) (*ticket.Ticket, error) {
+	if len(a.parkingLots) == 0 {
+		return nil, errors.ErrNoParkingLotAssignedToAttendant
+	}
+
+	var selectedLot *parkinglot.ParkingLot
+
 	for _, l := range a.parkingLots {
-		t, _ := l.Park(vehicle)
-		if t != nil {
+		if !l.IsFull() {
+			if selectedLot == nil || l.CountParkedVehicles() < selectedLot.CountParkedVehicles() {
+				selectedLot = l
+			}
+		}
+	}
+
+	if selectedLot != nil {
+		t, err := selectedLot.Park(vehicle)
+		if err == nil {
 			return t, nil
 		}
 	}
+
 	return nil, errors.ErrAllLotsAreFull
 }
 

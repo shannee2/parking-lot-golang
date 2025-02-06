@@ -1,21 +1,21 @@
 package vehicle
 
 type Vehicle struct {
-	RegistrationNumber string
-	Color              VehicleColor
+	registrationNumber string
+	color              VehicleColor
 }
 
 func (v Vehicle) HasRegistrationNumber(registrationNumber string) bool {
-	return v.RegistrationNumber == registrationNumber
+	return v.registrationNumber == registrationNumber
 }
 
 func (v Vehicle) HasColor(color VehicleColor) bool {
-	return v.Color == color
+	return v.color == color
 }
 
 func NewVehicle(registrationNumber string, color VehicleColor) *Vehicle {
 	return &Vehicle{
-		RegistrationNumber: registrationNumber,
-		Color:              color,
+		registrationNumber: registrationNumber,
+		color:              color,
 	}
 }

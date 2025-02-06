@@ -34,9 +34,9 @@ func TestParkingLotCreation(t *testing.T) {
 func TestParkVehicle_AvailableSlot(t *testing.T) {
 	parkingLot, _ := NewParkingLot(2)
 	registrationNumber := "UJ-12-HG-3847"
-	vehicle := vehicle.NewVehicle(registrationNumber, vehicle.Red)
+	v := vehicle.NewVehicle(registrationNumber, vehicle.Red)
 
-	parkingLot.Park(vehicle)
+	parkingLot.Park(v)
 	isVehicleParked := parkingLot.IsVehicleParked(registrationNumber)
 
 	if !isVehicleParked {

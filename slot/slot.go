@@ -21,6 +21,8 @@ func (s *Slot) IsOccupied() bool {
 	return s.vehicle != nil
 }
 
+// particular excepiton
+
 func (s *Slot) UnPark() error {
 	if s.vehicle == nil {
 		return errors.ErrSlotEmpty

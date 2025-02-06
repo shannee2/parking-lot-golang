@@ -47,10 +47,10 @@ func (l *ParkingLot) UnPark(t *ticket.Ticket) error {
 	s, exists := l.ticketToSlot[t]
 	if exists {
 		err := s.UnPark()
-		if err != nil {
+		if err == nil {
 			delete(l.ticketToSlot, t)
+			return nil
 		}
-		return err
 	}
 	return errors.ErrTicketNotFound
 }

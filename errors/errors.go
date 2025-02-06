@@ -13,3 +13,7 @@ var ErrInvalidSlotSize = errors.New("slot size must be greater than 0")
 var ErrAllSlotsOccupied = errors.New("all slots are occupied")
 
 var ErrTicketNotFound = errors.New("ticket does not found")
+
+var ErrInvalidParkingLot = errors.New("invalid parking lot")
+
+var ErrAllLotsAreFull = errors.New("all lots are full")

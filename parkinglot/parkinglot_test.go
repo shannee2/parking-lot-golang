@@ -125,7 +125,7 @@ func TestParkingVehicle_WhenAnotherVehicleUnparks(t *testing.T) {
 		t.Errorf("Expected to park the third vehicle after unparking the first vehicle, but got error: %v", err)
 	}
 
-	isThirdVehicleParked := parkingLot.IsVehicleParked(thirdVehicle.RegistrationNumber)
+	isThirdVehicleParked := parkingLot.IsVehicleParked("MP-13-UH-9098")
 	if !isThirdVehicleParked {
 		t.Error("Expected the third vehicle to be parked, but it is not parked")
 	}

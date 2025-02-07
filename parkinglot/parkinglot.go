@@ -1,6 +1,7 @@
 package parkinglot
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"parkinglot/errors"
 	"parkinglot/slot"
@@ -45,7 +46,7 @@ func (l *ParkingLot) Park(vehicle *vehicle.Vehicle) (*ticket.Ticket, error) {
 	availableSlot := l.fetchNearestAvailableSlot()
 	if availableSlot != nil {
 		availableSlot.Park(vehicle)
-		t := ticket.NewTicket()
+		t := ticket.New()
 		l.ticketToSlot[t] = availableSlot
 		// Notify observers
 		if l.IsFull() {
@@ -54,6 +55,23 @@ func (l *ParkingLot) Park(vehicle *vehicle.Vehicle) (*ticket.Ticket, error) {
 		return t, nil
 	}
 	return nil, errors.ErrAllSlotsOccupied
+}
+
+func (l *ParkingLot) UnPark(t *ticket.Ticket) error {
+	s, ticketExists := l.ticketToSlot[t]
+	if !ticketExists {
+		return errors.ErrTicketNotFound
+	}
+	wasFull := l.IsFull()
+	err := s.UnPark()
+	if err != nil {
+		return err
+	}
+	delete(l.ticketToSlot, t)
+	if wasFull {
+		l.notifyObserversLotAvailable()
+	}
+	return nil
 }
 
 func (l *ParkingLot) fetchNearestAvailableSlot() *slot.Slot {
@@ -75,22 +93,6 @@ func (l *ParkingLot) IsVehicleParked(registrationNumber string) bool {
 	return false
 }
 
-func (l *ParkingLot) UnPark(t *ticket.Ticket) error {
-	s, exists := l.ticketToSlot[t]
-	if exists {
-		wasFull := l.IsFull()
-		err := s.UnPark()
-		if err == nil {
-			delete(l.ticketToSlot, t)
-			if wasFull {
-				l.notifyObserversLotAvailable()
-			}
-			return nil
-		}
-	}
-	return errors.ErrTicketNotFound
-}
-
 func (l *ParkingLot) countVehiclesWithColor(color vehicle.VehicleColor) int {
 	count := 0
 	for _, s := range l.slots {
@@ -101,7 +103,7 @@ func (l *ParkingLot) countVehiclesWithColor(color vehicle.VehicleColor) int {
 	return count
 }
 
-func NewParkingLot(size int) (*ParkingLot, error) {
+func New(size int) (*ParkingLot, error) {
 	if size <= 0 {
 		return nil, errors.ErrInvalidSlotSize
 	}
@@ -113,7 +115,7 @@ func NewParkingLot(size int) (*ParkingLot, error) {
 		observers:    []ParkingLotObserver{},
 	}
 	for i := 0; i < size; i++ {
-		parkingLot.slots[i] = slot.NewSlot()
+		parkingLot.slots[i] = slot.New()
 	}
 	return parkingLot, nil
 }
@@ -135,4 +137,27 @@ func (l *ParkingLot) IsFull() bool {
 		}
 	}
 	return true
+}
+
+func (l *ParkingLot) TotalSlots() int {
+	return len(l.slots)
+}
+
+func (l *ParkingLot) ParkInSlot(v *vehicle.Vehicle, index int) (*ticket.Ticket, error) {
+	err := l.slots[index].Park(v)
+	if err != nil {
+		return nil, err
+	}
+	return ticket.New(), nil
+}
+
+func (l *ParkingLot) Display() {
+	for _, s := range l.slots {
+		if s.IsOccupied() {
+			fmt.Print("* ")
+		} else {
+			fmt.Print("- ")
+		}
+	}
+	fmt.Println()
 }

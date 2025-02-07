@@ -9,13 +9,13 @@ import (
 
 func TestEvenDistributionOfVehicles_When2ParkingLots_And2Vehicles(t *testing.T) {
 	att := NewSmartAttendant()
-	l1, _ := parkinglot.NewParkingLot(2)
-	l2, _ := parkinglot.NewParkingLot(2)
+	l1, _ := parkinglot.New(2)
+	l2, _ := parkinglot.New(2)
 	att.AssignParkingLot(l1)
 	att.AssignParkingLot(l2)
 
-	v1 := vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red)
-	v2 := vehicle.NewVehicle("RJ-12-JI-5678", vehicle.Blue)
+	v1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	v2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
 
 	att.Park(v1)
 	att.Park(v2)
@@ -30,18 +30,18 @@ func TestEvenDistributionOfVehicles_When2ParkingLots_And2Vehicles(t *testing.T) 
 
 func TestEvenDistributionOfVehicles_When3ParkingLots_And9Vehicles(t *testing.T) {
 	att := NewSmartAttendant()
-	l1, _ := parkinglot.NewParkingLot(5)
-	l2, _ := parkinglot.NewParkingLot(3)
-	l3, _ := parkinglot.NewParkingLot(2)
+	l1, _ := parkinglot.New(5)
+	l2, _ := parkinglot.New(3)
+	l3, _ := parkinglot.New(2)
 	att.AssignParkingLot(l1)
 	att.AssignParkingLot(l2)
 	att.AssignParkingLot(l3)
 
 	// park 3 vehicles
 
-	v1 := vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red)
-	v2 := vehicle.NewVehicle("RJ-12-JI-5678", vehicle.Blue)
-	v3 := vehicle.NewVehicle("RJ-12-JI-5008", vehicle.Blue)
+	v1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	v2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
+	v3 := vehicle.New("RJ-12-JI-5008", vehicle.Blue)
 
 	att.Park(v1)
 	att.Park(v2)
@@ -57,9 +57,9 @@ func TestEvenDistributionOfVehicles_When3ParkingLots_And9Vehicles(t *testing.T) 
 
 	// park 3 more vehicles
 
-	v4 := vehicle.NewVehicle("RJ-12-JI-6009", vehicle.Green)
-	v5 := vehicle.NewVehicle("RJ-12-JI-7001", vehicle.Blue)
-	v6 := vehicle.NewVehicle("RJ-12-JI-8002", vehicle.Red)
+	v4 := vehicle.New("RJ-12-JI-6009", vehicle.Green)
+	v5 := vehicle.New("RJ-12-JI-7001", vehicle.Blue)
+	v6 := vehicle.New("RJ-12-JI-8002", vehicle.Red)
 
 	att.Park(v4)
 	att.Park(v5)
@@ -75,9 +75,9 @@ func TestEvenDistributionOfVehicles_When3ParkingLots_And9Vehicles(t *testing.T) 
 
 	// park another 3 vehicles
 
-	v7 := vehicle.NewVehicle("RJ-12-JI-9003", vehicle.Red)
-	v8 := vehicle.NewVehicle("RJ-12-JI-1004", vehicle.Green)
-	v9 := vehicle.NewVehicle("RJ-12-JI-1105", vehicle.Blue)
+	v7 := vehicle.New("RJ-12-JI-9003", vehicle.Red)
+	v8 := vehicle.New("RJ-12-JI-1004", vehicle.Green)
+	v9 := vehicle.New("RJ-12-JI-1105", vehicle.Blue)
 
 	att.Park(v7)
 	att.Park(v8)

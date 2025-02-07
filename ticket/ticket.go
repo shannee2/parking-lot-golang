@@ -3,6 +3,6 @@ package ticket
 type Ticket struct {
 }
 
-func NewTicket() *Ticket {
+func New() *Ticket {
 	return &Ticket{}
 }

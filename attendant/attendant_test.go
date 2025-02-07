@@ -15,7 +15,7 @@ func TestAttendantCreation(t *testing.T) {
 
 func TestAssignParkingLotToAttendant(t *testing.T) {
 	att := NewAttendant()
-	l, err := parkinglot.NewParkingLot(1)
+	l, err := parkinglot.New(1)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l)
 	assert.Contains(t, att.ParkingLots, l)
@@ -23,26 +23,26 @@ func TestAssignParkingLotToAttendant(t *testing.T) {
 
 func TestParkVehicle(t *testing.T) {
 	att := NewAttendant()
-	l, err := parkinglot.NewParkingLot(1)
+	l, err := parkinglot.New(1)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l)
 	registrationNumber := "RJ-12-JI-1234"
-	att.Park(vehicle.NewVehicle(registrationNumber, vehicle.Red))
+	att.Park(vehicle.New(registrationNumber, vehicle.Red))
 	parked := att.IsParked(registrationNumber)
 	assert.True(t, parked)
 }
 
 func TestParkMultipleVehicle(t *testing.T) {
 	att := NewAttendant()
-	l, err := parkinglot.NewParkingLot(2)
+	l, err := parkinglot.New(2)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l)
 
 	firstRegistrationNumber := "RJ-12-JI-1234"
 	secondRegistrationNumber := "RJ-12-JI-5678"
 
-	vehicle1 := vehicle.NewVehicle(firstRegistrationNumber, vehicle.Red)
-	vehicle2 := vehicle.NewVehicle(secondRegistrationNumber, vehicle.Blue)
+	vehicle1 := vehicle.New(firstRegistrationNumber, vehicle.Red)
+	vehicle2 := vehicle.New(secondRegistrationNumber, vehicle.Blue)
 
 	ticket1, err := att.Park(vehicle1)
 	assert.NoError(t, err)
@@ -58,16 +58,16 @@ func TestParkMultipleVehicle(t *testing.T) {
 
 func TestParkVehicleInMultipleParkingLots(t *testing.T) {
 	att := NewAttendant()
-	l1, err := parkinglot.NewParkingLot(2)
+	l1, err := parkinglot.New(2)
 	assert.NoError(t, err)
-	l2, err := parkinglot.NewParkingLot(1)
+	l2, err := parkinglot.New(1)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l1)
 	att.AssignParkingLot(l2)
 
-	vehicle1 := vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red)
-	vehicle2 := vehicle.NewVehicle("RJ-12-JI-5678", vehicle.Blue)
-	vehicle3 := vehicle.NewVehicle("RJ-12-JI-9101", vehicle.Green)
+	vehicle1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	vehicle2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
+	vehicle3 := vehicle.New("RJ-12-JI-9101", vehicle.Green)
 
 	ticket1, err := att.Park(vehicle1)
 	assert.NoError(t, err)
@@ -88,16 +88,16 @@ func TestParkVehicleInMultipleParkingLots(t *testing.T) {
 
 func TestThrowError_WhenAllLotsAreFull(t *testing.T) {
 	att := NewAttendant()
-	l1, err := parkinglot.NewParkingLot(1)
+	l1, err := parkinglot.New(1)
 	assert.NoError(t, err)
-	l2, err := parkinglot.NewParkingLot(1)
+	l2, err := parkinglot.New(1)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l1)
 	att.AssignParkingLot(l2)
 
-	vehicle1 := vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red)
-	vehicle2 := vehicle.NewVehicle("RJ-12-JI-5678", vehicle.Blue)
-	vehicle3 := vehicle.NewVehicle("RJ-12-JI-9101", vehicle.Green)
+	vehicle1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	vehicle2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
+	vehicle3 := vehicle.New("RJ-12-JI-9101", vehicle.Green)
 
 	_, err = att.Park(vehicle1)
 	assert.NoError(t, err)
@@ -112,12 +112,12 @@ func TestThrowError_WhenAllLotsAreFull(t *testing.T) {
 
 func TestUnparkVehicle(t *testing.T) {
 	att := NewAttendant()
-	l, err := parkinglot.NewParkingLot(2)
+	l, err := parkinglot.New(2)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l)
 
 	registrationNumber := "RJ-12-JI-1234"
-	vehicle := vehicle.NewVehicle(registrationNumber, vehicle.Red)
+	vehicle := vehicle.New(registrationNumber, vehicle.Red)
 	ticket, err := att.Park(vehicle)
 	assert.NoError(t, err)
 	assert.NotNil(t, ticket)
@@ -127,18 +127,20 @@ func TestUnparkVehicle(t *testing.T) {
 	assert.False(t, att.IsParked(registrationNumber))
 }
 
+// test to unpark in unassigned parkinglot
+
 func TestThrowErrorWhenParking_IfNoParkingLotAssigned(t *testing.T) {
 	att := NewAttendant()
 
-	_, err := att.Park(vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red))
+	_, err := att.Park(vehicle.New("RJ-12-JI-1234", vehicle.Red))
 	assert.Equal(t, errors.ErrNoParkingLotAssignedToAttendant, err)
 }
 
 func TestDoesNotThrowErrorWhenParking_IfParkingLotAssigned(t *testing.T) {
 	att := NewAttendant()
-	l, _ := parkinglot.NewParkingLot(1)
+	l, _ := parkinglot.New(1)
 	att.AssignParkingLot(l)
 
-	_, err := att.Park(vehicle.NewVehicle("RJ-12-JI-1234", vehicle.Red))
+	_, err := att.Park(vehicle.New("RJ-12-JI-1234", vehicle.Red))
 	assert.NoError(t, err)
 }

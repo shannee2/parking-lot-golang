@@ -1,24 +1,58 @@
 package policeman
 
 import (
+	"github.com/stretchr/testify/mock"
 	"parkinglot/parkinglot"
 	"parkinglot/vehicle"
 	"testing"
 )
 
-func TestNotifyOwnerWhenParkingLotFull(t *testing.T) {
-	p := NewPoliceman()
+type MockPoliceMan struct {
+	PoliceMan
+	mock.Mock
+}
 
-	l, _ := parkinglot.NewParkingLot(2)
+func (p *MockPoliceMan) OnParkingLotFull(l *parkinglot.ParkingLot) {
+	p.Called(l)
+}
 
-	l.AddObserver(p)
+func (p *MockPoliceMan) OnParkingLotAvailable(l *parkinglot.ParkingLot) {
+	p.Called(l)
+}
 
-	r1 := "RJ-12-JI-1234"
-	r2 := "RJ-12-JI-5678"
-	v1 := vehicle.NewVehicle(r1, vehicle.Red)
-	v2 := vehicle.NewVehicle(r2, vehicle.Blue)
+func TestOwnerGetsNotifiedWhenParkingLotIsFull(t *testing.T) {
+	mockPoliceman := new(MockPoliceMan)
 
-	_, _ = l.Park(v1)
-	ticket, _ := l.Park(v2)
-	l.UnPark(ticket)
+	parkingLot, _ := parkinglot.New(2)
+
+	parkingLot.AddObserver(mockPoliceman)
+
+	mockPoliceman.On("OnParkingLotFull", parkingLot).Once()
+	mockPoliceman.On("OnParkingLotAvailable", parkingLot).Once()
+
+	v1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	v2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
+
+	_, _ = parkingLot.Park(v1)
+	ticket, _ := parkingLot.Park(v2)
+	_ = parkingLot.UnPark(ticket)
+
+	mockPoliceman.AssertExpectations(t)
+}
+
+func TestOwnerNotNotifiedWhenParkingLotIsNotFull(t *testing.T) {
+	mockPoliceman := new(MockPoliceMan)
+	parkingLot, _ := parkinglot.New(3)
+
+	parkingLot.AddObserver(mockPoliceman)
+
+	v1 := vehicle.New("RJ-12-JI-1234", vehicle.Red)
+	v2 := vehicle.New("RJ-12-JI-5678", vehicle.Blue)
+
+	_, _ = parkingLot.Park(v1)
+	_, _ = parkingLot.Park(v2)
+
+	mockPoliceman.AssertNotCalled(t, "OnParkingLotFull")
+
+	mockPoliceman.AssertNotCalled(t, "OnParkingLotAvailable")
 }

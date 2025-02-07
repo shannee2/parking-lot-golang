@@ -39,7 +39,7 @@ func (s *Slot) IsVehicleParked(registrationNumber string) bool {
 	return s.vehicle != nil && s.vehicle.HasRegistrationNumber(registrationNumber)
 }
 
-func NewSlot() *Slot {
+func New() *Slot {
 	return &Slot{
 		vehicle: nil,
 	}

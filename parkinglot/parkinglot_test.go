@@ -9,7 +9,7 @@ import (
 )
 
 func TestThrowException_WhenSlotSizeIsNegative(t *testing.T) {
-	_, err := NewParkingLot(-1)
+	_, err := New(-1)
 
 	if err != errors.ErrInvalidSlotSize {
 		t.Error("Expected ErrInvalidSlotSize when slot size is negative, but nothing thrown")
@@ -17,7 +17,7 @@ func TestThrowException_WhenSlotSizeIsNegative(t *testing.T) {
 }
 
 func TestThrowException_WhenSlotSizeIs0(t *testing.T) {
-	_, err := NewParkingLot(0)
+	_, err := New(0)
 
 	if err != errors.ErrInvalidSlotSize {
 		t.Error("Expected ErrInvalidSlotSize when slot size is 0, but nothing thrown")
@@ -25,7 +25,7 @@ func TestThrowException_WhenSlotSizeIs0(t *testing.T) {
 }
 
 func TestParkingLotCreation(t *testing.T) {
-	_, err := NewParkingLot(1)
+	_, err := New(1)
 
 	if err != nil {
 		t.Error("Expected successful ParkingLot creation, but error thrown")
@@ -33,9 +33,9 @@ func TestParkingLotCreation(t *testing.T) {
 }
 
 func TestParkVehicle_AvailableSlot(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
+	parkingLot, _ := New(2)
 	registrationNumber := "UJ-12-HG-3847"
-	v := vehicle.NewVehicle(registrationNumber, vehicle.Red)
+	v := vehicle.New(registrationNumber, vehicle.Red)
 
 	parkingLot.Park(v)
 	isVehicleParked := parkingLot.IsVehicleParked(registrationNumber)
@@ -46,13 +46,13 @@ func TestParkVehicle_AvailableSlot(t *testing.T) {
 }
 
 func TestMulitpleVehiclePark_InAvailableSlot(t *testing.T) {
-	parkingLot, _ := NewParkingLot(3)
+	parkingLot, _ := New(3)
 	firstRegNum := "UJ-12-HG-3847"
 	secondRegNum := "DJ-79-DH-2938"
 	thirdRegNum := "MP-13-UH-9098"
-	firstVehicle := vehicle.NewVehicle(firstRegNum, vehicle.Red)
-	secondVehicle := vehicle.NewVehicle(secondRegNum, vehicle.Red)
-	thirdVehicle := vehicle.NewVehicle(thirdRegNum, vehicle.Red)
+	firstVehicle := vehicle.New(firstRegNum, vehicle.Red)
+	secondVehicle := vehicle.New(secondRegNum, vehicle.Red)
+	thirdVehicle := vehicle.New(thirdRegNum, vehicle.Red)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -68,13 +68,13 @@ func TestMulitpleVehiclePark_InAvailableSlot(t *testing.T) {
 }
 
 func TestThrowExceptionWhenAllSlotsOccupied(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
+	parkingLot, _ := New(2)
 	firstRegNum := "UJ-12-HG-3847"
 	secondRegNum := "DJ-79-DH-2938"
 	thirdRegNum := "MP-13-UH-9098"
-	firstVehicle := vehicle.NewVehicle(firstRegNum, vehicle.Red)
-	secondVehicle := vehicle.NewVehicle(secondRegNum, vehicle.Red)
-	thirdVehicle := vehicle.NewVehicle(thirdRegNum, vehicle.Red)
+	firstVehicle := vehicle.New(firstRegNum, vehicle.Red)
+	secondVehicle := vehicle.New(secondRegNum, vehicle.Red)
+	thirdVehicle := vehicle.New(thirdRegNum, vehicle.Red)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -86,9 +86,9 @@ func TestThrowExceptionWhenAllSlotsOccupied(t *testing.T) {
 }
 
 func TestUnparkVehicle(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
+	parkingLot, _ := New(2)
 	registrationNumber := "UJ-12-HG-3847"
-	vehicle := vehicle.NewVehicle(registrationNumber, vehicle.Red)
+	vehicle := vehicle.New(registrationNumber, vehicle.Red)
 
 	ticket, _ := parkingLot.Park(vehicle)
 	parkingLot.UnPark(ticket)
@@ -100,8 +100,8 @@ func TestUnparkVehicle(t *testing.T) {
 }
 
 func TestThrowException_WhenUnparkingInEmptySlot(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
-	invalidTicket := ticket.NewTicket()
+	parkingLot, _ := New(2)
+	invalidTicket := ticket.New()
 
 	err := parkingLot.UnPark(invalidTicket)
 
@@ -111,10 +111,10 @@ func TestThrowException_WhenUnparkingInEmptySlot(t *testing.T) {
 }
 
 func TestParkingVehicle_WhenAnotherVehicleUnparks(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
-	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
-	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Green)
+	parkingLot, _ := New(2)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.New("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.New("MP-13-UH-9098", vehicle.Green)
 
 	firstTicket, _ := parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -133,13 +133,13 @@ func TestParkingVehicle_WhenAnotherVehicleUnparks(t *testing.T) {
 }
 
 func TestCountVehiclesWithRedColor(t *testing.T) {
-	parkingLot, _ := NewParkingLot(5)
+	parkingLot, _ := New(5)
 
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
-	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
-	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Red)
-	fourthVehicle := vehicle.NewVehicle("KA-05-MH-1234", vehicle.Green)
-	fifthVehicle := vehicle.NewVehicle("TN-22-XY-5678", vehicle.Red)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.New("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.New("MP-13-UH-9098", vehicle.Red)
+	fourthVehicle := vehicle.New("KA-05-MH-1234", vehicle.Green)
+	fifthVehicle := vehicle.New("TN-22-XY-5678", vehicle.Red)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -165,10 +165,10 @@ func TestCountVehiclesWithRedColor(t *testing.T) {
 }
 
 func TestCountParkedVehicles_When2ParkedVehicles(t *testing.T) {
-	parkingLot, _ := NewParkingLot(5)
+	parkingLot, _ := New(5)
 
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
-	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.New("DJ-79-DH-2938", vehicle.Blue)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -178,13 +178,13 @@ func TestCountParkedVehicles_When2ParkedVehicles(t *testing.T) {
 }
 
 func TestCountParkedVehicles_When5ParkedVehicles(t *testing.T) {
-	parkingLot, _ := NewParkingLot(5)
+	parkingLot, _ := New(5)
 
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
-	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
-	thirdVehicle := vehicle.NewVehicle("MP-13-UH-9098", vehicle.Green)
-	fourthVehicle := vehicle.NewVehicle("KA-05-MH-1234", vehicle.Red)
-	fifthVehicle := vehicle.NewVehicle("TN-22-XY-5678", vehicle.Blue)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.New("DJ-79-DH-2938", vehicle.Blue)
+	thirdVehicle := vehicle.New("MP-13-UH-9098", vehicle.Green)
+	fourthVehicle := vehicle.New("KA-05-MH-1234", vehicle.Red)
+	fifthVehicle := vehicle.New("TN-22-XY-5678", vehicle.Blue)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -197,9 +197,9 @@ func TestCountParkedVehicles_When5ParkedVehicles(t *testing.T) {
 }
 
 func TestIsFull_WhenParkingLotIsFull(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
-	secondVehicle := vehicle.NewVehicle("DJ-79-DH-2938", vehicle.Blue)
+	parkingLot, _ := New(2)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
+	secondVehicle := vehicle.New("DJ-79-DH-2938", vehicle.Blue)
 
 	parkingLot.Park(firstVehicle)
 	parkingLot.Park(secondVehicle)
@@ -209,8 +209,8 @@ func TestIsFull_WhenParkingLotIsFull(t *testing.T) {
 }
 
 func TestIsFull_WhenParkingLotIsNotFull(t *testing.T) {
-	parkingLot, _ := NewParkingLot(2)
-	firstVehicle := vehicle.NewVehicle("UJ-12-HG-3847", vehicle.Red)
+	parkingLot, _ := New(2)
+	firstVehicle := vehicle.New("UJ-12-HG-3847", vehicle.Red)
 
 	parkingLot.Park(firstVehicle)
 

@@ -13,7 +13,7 @@ func (v Vehicle) HasColor(color VehicleColor) bool {
 	return v.color == color
 }
 
-func NewVehicle(registrationNumber string, color VehicleColor) *Vehicle {
+func New(registrationNumber string, color VehicleColor) *Vehicle {
 	return &Vehicle{
 		registrationNumber: registrationNumber,
 		color:              color,

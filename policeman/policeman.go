@@ -8,7 +8,7 @@ import (
 type PoliceMan struct {
 }
 
-func NewPoliceman() *PoliceMan {
+func New() *PoliceMan {
 	return &PoliceMan{}
 }
 

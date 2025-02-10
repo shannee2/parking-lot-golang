@@ -117,7 +117,7 @@ func TestAssignParkingLotToOwner(t *testing.T) {
 
 	owner.AssignParkingLot(parkingLot)
 
-	assert.Contains(t, owner.ParkingLots, parkingLot, "Expected parking lot to be assigned to the owner")
+	assert.Contains(t, owner.parkingLots, parkingLot, "Expected parking lot to be assigned to the owner")
 }
 
 func TestOwnerCanParkVehicles(t *testing.T) {

@@ -30,7 +30,7 @@ func (o *Owner) OnParkingLotAvailable(l *parkinglot.ParkingLot) {
 func New() *Owner {
 	return &Owner{
 		Attendant: attendant.Attendant{
-			ParkingLots: make([]*parkinglot.ParkingLot, 0),
+			parkingLots: make([]*parkinglot.ParkingLot, 0),
 		},
 		attendants: make([]*attendant.Attendant, 0),
 	}

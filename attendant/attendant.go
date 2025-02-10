@@ -8,25 +8,33 @@ import (
 )
 
 type Attendant struct {
-	ParkingLots []*parkinglot.ParkingLot
+	parkingLots     []*parkinglot.ParkingLot
+	parkingStrategy ParkingStrategy
 }
 
 func (a *Attendant) AssignParkingLot(lot *parkinglot.ParkingLot) {
-	a.ParkingLots = append(a.ParkingLots, lot)
+	a.parkingLots = append(a.parkingLots, lot)
+}
+
+func (a *Attendant) ChangeStrategy(strategy ParkingStrategy) {
+	a.parkingStrategy = strategy
 }
 
 func (a *Attendant) Park(vehicle *vehicle.Vehicle) (*ticket.Ticket, error) {
-	for _, l := range a.ParkingLots {
-		t, _ := l.Park(vehicle)
-		if t != nil {
-			return t, nil
-		}
+	if len(a.parkingLots) == 0 {
+		return nil, errors.ErrNoParkingLotAssignedToAttendant
 	}
-	return nil, errors.ErrAllLotsAreFull
+
+	selectedLot, err := a.parkingStrategy.SelectLot(a.parkingLots)
+	if err != nil {
+		return nil, err
+	}
+
+	return selectedLot.Park(vehicle)
 }
 
 func (a *Attendant) IsParked(registrationNumber string) bool {
-	for _, l := range a.ParkingLots {
+	for _, l := range a.parkingLots {
 		if l.IsVehicleParked(registrationNumber) {
 			return true
 		}
@@ -35,15 +43,16 @@ func (a *Attendant) IsParked(registrationNumber string) bool {
 }
 
 func (a *Attendant) Unpark(t *ticket.Ticket) error {
-	for _, l := range a.ParkingLots {
+	for _, l := range a.parkingLots {
 		err := l.UnPark(t)
 		return err
 	}
 	return errors.ErrTicketNotFound
 }
 
-func NewAttendant() *Attendant {
+func NewAttendant(strategy ParkingStrategy) *Attendant {
 	return &Attendant{
-		ParkingLots: make([]*parkinglot.ParkingLot, 0),
+		parkingLots:     make([]*parkinglot.ParkingLot, 0),
+		parkingStrategy: strategy,
 	}
 }

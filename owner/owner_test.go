@@ -10,22 +10,22 @@ import (
 )
 
 func TestManagerCreation(t *testing.T) {
-	m := New()
+	m := New(&attendant.SequentialStrategy{})
 	assert.NotNil(t, m)
 }
 
 func TestAssignAttendant(t *testing.T) {
-	m := New()
-	a := attendant.NewAttendant()
+	m := New(&attendant.SequentialStrategy{})
+	a := attendant.NewAttendant(&attendant.SequentialStrategy{})
 	m.AssignAttendant(a)
 
 	assert.Contains(t, m.attendants, a, "Expected attendant to be assigned to the owner")
 }
 
 func TestAssignParkingLotToMultipleAttendant(t *testing.T) {
-	m := New()
-	a1 := attendant.NewAttendant()
-	a2 := attendant.NewAttendant()
+	m := New(&attendant.SequentialStrategy{})
+	a1 := attendant.NewAttendant(&attendant.SequentialStrategy{})
+	a2 := attendant.NewAttendant(&attendant.SequentialStrategy{})
 
 	l, _ := parkinglot.New(10)
 
@@ -45,7 +45,7 @@ func TestAssignParkingLotToMultipleAttendant(t *testing.T) {
 }
 
 func TestNotifyOwnerWhenParkingLotFull(t *testing.T) {
-	owner := New()
+	owner := New(&attendant.SequentialStrategy{})
 
 	l, _ := parkinglot.New(2)
 
@@ -112,16 +112,16 @@ func TestOwnerNotNotifiedWhenParkingLotIsNotFull(t *testing.T) {
 }
 
 func TestAssignParkingLotToOwner(t *testing.T) {
-	owner := New()
+	owner := New(&attendant.SequentialStrategy{})
 	parkingLot, _ := parkinglot.New(10)
 
 	owner.AssignParkingLot(parkingLot)
 
-	assert.Contains(t, owner.parkingLots, parkingLot, "Expected parking lot to be assigned to the owner")
+	assert.Contains(t, owner.ParkingLots, parkingLot, "Expected parking lot to be assigned to the owner")
 }
 
 func TestOwnerCanParkVehicles(t *testing.T) {
-	owner := New()
+	owner := New(&attendant.SequentialStrategy{})
 	parkingLot, _ := parkinglot.New(2)
 
 	owner.AssignParkingLot(parkingLot)

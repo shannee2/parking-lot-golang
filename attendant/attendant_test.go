@@ -18,7 +18,7 @@ func TestAssignParkingLotToAttendant(t *testing.T) {
 	l, err := parkinglot.New(1)
 	assert.NoError(t, err)
 	att.AssignParkingLot(l)
-	assert.Contains(t, att.parkingLots, l)
+	assert.Contains(t, att.ParkingLots, l)
 }
 
 func TestParkVehicle(t *testing.T) {
@@ -280,8 +280,8 @@ func TestCircularStrategyChange(t *testing.T) {
 //	att.Park(v2)
 //	att.Park(v3)
 //
-//	lot1Vehicles := att.parkingLots[0].countParkedVehicles()
-//	lot2Vehicles := att.parkingLots[1].countParkedVehicles()
+//	lot1Vehicles := att.ParkingLots[0].countParkedVehicles()
+//	lot2Vehicles := att.ParkingLots[1].countParkedVehicles()
 //
 //	assert.Equal(t, 2, lot1Vehicles)
 //	assert.Equal(t, 1, lot2Vehicles)
@@ -290,8 +290,8 @@ func TestCircularStrategyChange(t *testing.T) {
 //	v4 := vehicle.New("RJ-12-JI-3932", vehicle.Blue)
 //	att.Park(v4)
 //
-//	lot1Vehicles = att.parkingLots[0].countParkedVehicles()
-//	lot2Vehicles = att.parkingLots[1].countParkedVehicles()
+//	lot1Vehicles = att.ParkingLots[0].countParkedVehicles()
+//	lot2Vehicles = att.ParkingLots[1].countParkedVehicles()
 //
 //	assert.Equal(t, 3, lot1Vehicles)
 //	assert.Equal(t, 1, lot2Vehicles)
@@ -317,9 +317,9 @@ func TestCircularStrategyChange(t *testing.T) {
 //	att.Park(v2)
 //	att.Park(v3)
 //
-//	lot1Vehicles := att.parkingLots[0].countParkedVehicles()
-//	lot2Vehicles := att.parkingLots[1].countParkedVehicles()
-//	lot3Vehicles := att.parkingLots[2].countParkedVehicles()
+//	lot1Vehicles := att.ParkingLots[0].countParkedVehicles()
+//	lot2Vehicles := att.ParkingLots[1].countParkedVehicles()
+//	lot3Vehicles := att.ParkingLots[2].countParkedVehicles()
 //
 //	assert.Equal(t, 1, lot1Vehicles)
 //	assert.Equal(t, 1, lot2Vehicles)
@@ -335,9 +335,9 @@ func TestCircularStrategyChange(t *testing.T) {
 //	att.Park(v5)
 //	att.Park(v6)
 //
-//	lot1Vehicles = att.parkingLots[0].countParkedVehicles()
-//	lot2Vehicles = att.parkingLots[1].countParkedVehicles()
-//	lot3Vehicles = att.parkingLots[2].countParkedVehicles()
+//	lot1Vehicles = att.ParkingLots[0].countParkedVehicles()
+//	lot2Vehicles = att.ParkingLots[1].countParkedVehicles()
+//	lot3Vehicles = att.ParkingLots[2].countParkedVehicles()
 //
 //	assert.Equal(t, 2, lot1Vehicles)
 //	assert.Equal(t, 2, lot2Vehicles)
@@ -353,9 +353,9 @@ func TestCircularStrategyChange(t *testing.T) {
 //	att.Park(v8)
 //	att.Park(v9)
 //
-//	lot1Vehicles = att.parkingLots[0].countParkedVehicles()
-//	lot2Vehicles = att.parkingLots[1].countParkedVehicles()
-//	lot3Vehicles = att.parkingLots[2].countParkedVehicles()
+//	lot1Vehicles = att.ParkingLots[0].countParkedVehicles()
+//	lot2Vehicles = att.ParkingLots[1].countParkedVehicles()
+//	lot3Vehicles = att.ParkingLots[2].countParkedVehicles()
 //
 //	assert.Equal(t, 4, lot1Vehicles)
 //	assert.Equal(t, 3, lot2Vehicles)

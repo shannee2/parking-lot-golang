@@ -27,10 +27,11 @@ func (o *Owner) OnParkingLotAvailable(l *parkinglot.ParkingLot) {
 	fmt.Println("Alert! Parking lot with id=", l.Id, " has available space")
 }
 
-func New() *Owner {
+func New(strategy attendant.ParkingStrategy) *Owner {
 	return &Owner{
 		Attendant: attendant.Attendant{
-			parkingLots: make([]*parkinglot.ParkingLot, 0),
+			ParkingLots:     make([]*parkinglot.ParkingLot, 0),
+			ParkingStrategy: strategy,
 		},
 		attendants: make([]*attendant.Attendant, 0),
 	}

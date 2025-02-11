@@ -20,7 +20,7 @@ func (p *MockPoliceMan) OnParkingLotAvailable(l *parkinglot.ParkingLot) {
 	p.Called(l)
 }
 
-func TestOwnerGetsNotifiedWhenParkingLotIsFull(t *testing.T) {
+func TestOwnerGetsNotifiedWhenParkingLotIsFullAndAvailable(t *testing.T) {
 	mockPoliceman := new(MockPoliceMan)
 
 	parkingLot, _ := parkinglot.New(2)

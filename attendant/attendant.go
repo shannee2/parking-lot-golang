@@ -1,6 +1,7 @@
 package attendant
 
 import (
+	"fmt"
 	"parkinglot/errors"
 	"parkinglot/parkinglot"
 	"parkinglot/ticket"
@@ -25,7 +26,7 @@ func (a *Attendant) Park(vehicle *vehicle.Vehicle) (*ticket.Ticket, error) {
 		return nil, errors.ErrNoParkingLotAssignedToAttendant
 	}
 
-	selectedLot, err := a.parkingStrategy.SelectLot(a.parkingLots)
+	selectedLot, err := a.parkingStrategy.selectLot(a.parkingLots)
 	if err != nil {
 		return nil, err
 	}
@@ -45,8 +46,11 @@ func (a *Attendant) IsParked(registrationNumber string) bool {
 func (a *Attendant) Unpark(t *ticket.Ticket) error {
 	for _, l := range a.parkingLots {
 		err := l.UnPark(t)
-		return err
+		if err == nil {
+			return nil
+		}
 	}
+	fmt.Println("never seen this ticket")
 	return errors.ErrTicketNotFound
 }
 

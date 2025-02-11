@@ -8,19 +8,34 @@ import (
 )
 
 type ParkingStrategy interface {
-	SelectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error)
+	selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error)
 }
 
+type SequentialStrategy struct{}
+type LeastOccupiedStrategy struct{}
 type RandomStrategy struct{}
-type SmartStrategy struct{}
-type NormalStrategy struct{}
+type MostOccupiedStrategy struct{}
+type CircularStrategy struct {
+	selectedIndex int
+}
 
-func (s *SmartStrategy) SelectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+func (s *SequentialStrategy) selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+	for _, lot := range parkingLots {
+		if !lot.IsFull() {
+			return lot, nil
+		}
+	}
+	return nil, errors.ErrAllLotsAreFull
+}
+
+func (s *LeastOccupiedStrategy) selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
 	var selectedLot *parkinglot.ParkingLot
 	for _, lot := range parkingLots {
 		if !lot.IsFull() {
-			if selectedLot == nil || lot.CountParkedVehicles() < selectedLot.CountParkedVehicles() {
+			if selectedLot == nil {
 				selectedLot = lot
+			} else {
+				selectedLot = selectedLot.CompareLessOccupied(lot)
 			}
 		}
 	}
@@ -30,7 +45,7 @@ func (s *SmartStrategy) SelectLot(parkingLots []*parkinglot.ParkingLot) (*parkin
 	return selectedLot, nil
 }
 
-func (r *RandomStrategy) SelectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+func (r *RandomStrategy) selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
 	if len(parkingLots) == 0 {
 		return nil, errors.ErrAllLotsAreFull
 	}
@@ -42,13 +57,36 @@ func (r *RandomStrategy) SelectLot(parkingLots []*parkinglot.ParkingLot) (*parki
 	}
 }
 
-func (n *NormalStrategy) SelectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+func (m *MostOccupiedStrategy) selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+	var selectedLot *parkinglot.ParkingLot
 	for _, lot := range parkingLots {
 		if !lot.IsFull() {
-			return lot, nil
+			if selectedLot == nil {
+				selectedLot = lot
+			} else {
+				selectedLot = selectedLot.CompareMoreOccupied(lot)
+			}
 		}
 	}
-	return nil, errors.ErrAllLotsAreFull
+	if selectedLot == nil {
+		return nil, errors.ErrAllLotsAreFull
+	}
+	return selectedLot, nil
+}
+
+func (c *CircularStrategy) selectLot(parkingLots []*parkinglot.ParkingLot) (*parkinglot.ParkingLot, error) {
+	if len(parkingLots) == 0 {
+		return nil, errors.ErrAllLotsAreFull
+	}
+
+	for {
+		if !parkingLots[c.selectedIndex].IsFull() {
+			selectedLot := parkingLots[c.selectedIndex]
+			c.selectedIndex = (c.selectedIndex + 1) % len(parkingLots)
+			return selectedLot, nil
+		}
+		c.selectedIndex = (c.selectedIndex + 1) % len(parkingLots)
+	}
 }
 
 func GenerateRandomNumber(n int) int {

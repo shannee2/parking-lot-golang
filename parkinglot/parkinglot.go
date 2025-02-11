@@ -130,6 +130,20 @@ func (l *ParkingLot) CountParkedVehicles() int {
 	return count
 }
 
+func (l *ParkingLot) CompareMoreOccupied(lot *ParkingLot) *ParkingLot {
+	if lot.CountParkedVehicles() < l.CountParkedVehicles() {
+		return l
+	}
+	return lot
+}
+
+func (l *ParkingLot) CompareLessOccupied(lot *ParkingLot) *ParkingLot {
+	if lot.CountParkedVehicles() >= l.CountParkedVehicles() {
+		return l
+	}
+	return lot
+}
+
 func (l *ParkingLot) IsFull() bool {
 	for _, s := range l.slots {
 		if !s.IsOccupied() {
